@@ -1,0 +1,176 @@
+using System;
+using System.Collections.Generic;
+
+namespace jobbPlatsRegister
+{
+    // Base klass för alla Anställda
+    public class Anställda
+    {
+        public string Namn { get; set; }
+        public decimal Inkomst { get; set; }
+        public string TelefonNummer { get; set; }
+        public string Email { get; set; }
+        public string Roll { get; set; }
+
+        public Anställda(string namn, decimal inkomst, string telefonNummer, string email, string roll)
+        {
+            Namn = namn;
+            Inkomst = inkomst;
+            TelefonNummer = telefonNummer;
+            Email = email;
+            Roll = roll;
+        }
+
+        public override string ToString()
+        {
+            return $"Namn: {Namn}, Roll: {Roll}, Inkomst: {Inkomst:C}, Telefon: {TelefonNummer}, Email: {Email}";
+        }
+    }
+
+    // Arbetare klass
+    public class Arbetare : Anställda
+    {
+        public Arbetare(string namn, decimal inkomst, string telefonNummer, string email)
+            : base(namn, inkomst, telefonNummer, email, "Arbetare")
+        {
+        }
+    }
+
+    // Chef klass
+    public class Chef : Anställda
+    {
+        public Chef(string namn, decimal inkomst, string telefonNummer, string email)
+            : base(namn, inkomst, telefonNummer, email, "Chef")
+        {
+        }
+    }
+
+    // HR personal klass
+    public class HR : Anställda
+    {
+        public HR(string namn, decimal inkomst, string telefonNummer, string email)
+            : base(namn, inkomst, telefonNummer, email, "HR")
+        {
+        }
+    }
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            List<Anställda> anställda = new List<Anställda>
+            {
+                new Arbetare("Anna Kiwi", 30000, "070-1234567", "anna@company.com"),
+                new Arbetare("Benny Blåbär", 31000, "070-1234568", "benny@company.com"),
+                new Arbetare("Carina Citron", 32000, "070-1234569", "carina@company.com"),
+                new Arbetare("David Druva", 33000, "070-1234570", "david@company.com"),
+                new Arbetare("Gustav Guava", 34000, "070-1234571", "eva@company.com"),
+                new Arbetare("Frank Fikon", 35000, "070-1234572", "frank@company.com"),
+                new Arbetare("Greta Grapefrukt", 36000, "070-1234573", "greta@company.com"),
+                new Arbetare("Hugo Hallon", 37000, "070-1234574", "hugo@company.com"),
+                new Chef("Björn Banan", 50000, "070-2345678", "bjorn@company.com"),
+                new Chef("Ingrid Is", 55000, "070-2345679", "ingrid@company.com"),
+                new HR("Cecilia Citrus", 45000, "070-3456789", "cecilia@company.com"),
+                new HR("John Jordgubb", 46000, "070-3456790", "john@company.com"),
+                new HR("Linda Lime", 47000, "070-3456791", "linda@company.com")
+            };
+
+            bool avsluta = false;
+
+            while (!avsluta)
+            {
+                Console.WriteLine("\nVälj ett alternativ:");
+                Console.WriteLine("1. Se över alla anställda");
+                Console.WriteLine("2. Lägg till anställda");
+                Console.WriteLine("3. Ta bort anställda");
+                Console.WriteLine("4. Avsluta programmet");
+
+                int val = int.Parse(Console.ReadLine());
+
+                switch (val)
+                {
+                    case 1:
+                        VisaAllaAnställda(anställda);
+                        break;
+                    case 2:
+                        LäggTillAnställda(anställda);
+                        break;
+                    case 3:
+                        TaBortAnställda(anställda);
+                        break;
+                    case 4:
+                        avsluta = true;
+                        break;
+                    default:
+                        Console.WriteLine("Ogiltigt val, försök igen.");
+                        break;
+                }
+            }
+        }
+
+        static void VisaAllaAnställda(List<Anställda> anställda)
+        {
+            Console.WriteLine("\nAlla Anställda:");
+            foreach (var anställd in anställda)
+            {
+                Console.WriteLine(anställd);
+            }
+        }
+
+        static void LäggTillAnställda(List<Anställda> anställda)
+        {
+            Console.WriteLine("\nVälj roll att lägga till:");
+            Console.WriteLine("1. Arbetare");
+            Console.WriteLine("2. Chef");
+            Console.WriteLine("3. HR");
+
+            int rollVal = int.Parse(Console.ReadLine());
+
+            Console.Write("Namn: ");
+            string namn = Console.ReadLine();
+            Console.Write("Inkomst: ");
+            decimal inkomst = decimal.Parse(Console.ReadLine());
+            Console.Write("Telefonnummer: ");
+            string telefonNummer = Console.ReadLine();
+            Console.Write("Email: ");
+            string email = Console.ReadLine();
+
+            switch (rollVal)
+            {
+                case 1:
+                    anställda.Add(new Arbetare(namn, inkomst, telefonNummer, email));
+                    break;
+                case 2:
+                    anställda.Add(new Chef(namn, inkomst, telefonNummer, email));
+                    break;
+                case 3:
+                    anställda.Add(new HR(namn, inkomst, telefonNummer, email));
+                    break;
+                default:
+                    Console.WriteLine("Ogiltigt val, försök igen.");
+                    break;
+            }
+        }
+
+        static void TaBortAnställda(List<Anställda> anställda)
+        {
+            Console.WriteLine("\nAnge index på anställd att ta bort (0-baserat):");
+            for (int i = 0; i < anställda.Count; i++)
+            {
+                Console.WriteLine($"{i}. {anställda[i]}");
+            }
+
+            int index = int.Parse(Console.ReadLine());
+
+            if (index >= 0 && index < anställda.Count)
+            {
+                anställda.RemoveAt(index);
+                Console.WriteLine("Anställd borttagen.");
+            }
+            else
+            {
+                Console.WriteLine("Ogiltigt index, försök igen.");
+            }
+        }
+    }
+}
